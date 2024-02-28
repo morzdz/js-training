@@ -109,34 +109,39 @@ const questions = [
 ];
 
 function displayQuestion() {
-    questions.forEach(element => {
+    questions.forEach((element, questionIndex) => {
         let carte = document.createElement('article');
         carte.innerHTML = `
             <article class="card">
                 <h1>${element.question}</h1>
                 <div>
                     <ul class="reponse">
-                        <li onclick="trueOrFalse('${element.reponseCorrecte}', '${element.reponses.a}')">${element.reponses.a}</li>
-                        <li onclick="trueOrFalse('${element.reponseCorrecte}', '${element.reponses.b}')">${element.reponses.b}</li>
-                        <li onclick="trueOrFalse('${element.reponseCorrecte}', '${element.reponses.c}')">${element.reponses.c}</li>
-                        <li onclick="trueOrFalse('${element.reponseCorrecte}', '${element.reponses.d}')">${element.reponses.d}</li>
+                        ${Object.keys(element.reponses).map((key, index) => `
+                            <li class="option" id="option-${questionIndex}-${index}" onclick="correctOrNot('${element.reponseCorrecte}', '${element.reponses[key]}', 'option-${questionIndex}-${index}')">${element.reponses[key]}</li>
+                        `).join('')}
                     </ul>
                 </div>
             </article>
         `;
         document.getElementById('container').appendChild(carte);
     });
-}
+};
 
 displayQuestion();
+let count = 0;
 
-function trueOrFalse(answer, answerSelected) {
+function correctOrNot(answer, answerSelected, elementId) {
     console.log(answer);
     console.log(answerSelected);
-    if (answer == answerSelected) {
-        console.log("1");
-        
+    console.log(elementId);
+    const element = document.getElementById(elementId);
+    if (answer === answerSelected) {
+        console.log("Correct");
+        element.style.backgroundColor = "green";
+        count += 1;
+        console.log(count);
     } else {
-        console.log("2");
-    }
+        console.log("Incorrect");
+        element.style.backgroundColor = "red";
+    };
 }
